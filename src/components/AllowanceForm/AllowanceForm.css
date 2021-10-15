@@ -1,0 +1,13 @@
+.AddressForm {
+	margin-bottom: 50px;
+}
+
+.address {
+	margin-bottom: 4px !important;
+}
+
+.amount {
+	font-weight: 600;
+	color: tomato !important;
+}
+

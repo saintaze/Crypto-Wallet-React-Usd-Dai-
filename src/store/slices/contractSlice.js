@@ -1,24 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-
 const contractInitialState = {
-	dai: null,
-	defi: null,
+	tokens: []
 }
 
 export const contractSlice = createSlice({
   name: 'contract',
   initialState: contractInitialState,
   reducers: {
-		setContract(state, {payload}){
-			state.dai = payload.dai;
-			state.defi = payload.defi;
+		setContracts(state, {payload}){
+			state.tokens = payload.tokens;
+		},
+		updateBalance(state, {payload}){
+			const token = state.tokens.find(token => token.contract.address === payload.address);
+			token.balance = payload.balance;
 		}
-  },
+  }
 })
 
 export const { 
-	setContract
+	setContracts,
+	updateBalance
 } = contractSlice.actions
 
 export default contractSlice.reducer

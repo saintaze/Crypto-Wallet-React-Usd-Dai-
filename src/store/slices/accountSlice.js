@@ -1,11 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-
 const accountInitialState = {
-	signerAddress: '',
-	allowances: [],
-	daiBalance: 0,
-	usdBalance: 0
+	signerAddress: ''
 }
 
 export const accountSlice = createSlice({
@@ -13,14 +9,9 @@ export const accountSlice = createSlice({
   initialState: accountInitialState,
   reducers: {
 		setAccount(state, {payload}){
-			console.log(payload)
-			Object.assign(state, {...state, ...payload})
-			// state.signerAddress = payload.signerAddress;
-			// state.allowances = payload.allowances;
-			// state.daiBalance = payload.daiBalance;
-			// state.usdBalance = payload.usdBalance;
+			state.signerAddress = payload.signerAddress;
 		}
-  },
+  }
 })
 
 export const { 

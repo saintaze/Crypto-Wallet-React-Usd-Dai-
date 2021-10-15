@@ -1,0 +1,17 @@
+.topHeader {
+	margin-bottom: 20px !important;
+}
+
+.transferBtn {
+	margin-right: 10px !important;
+}
+
+.balance {
+	font-weight: 600;
+	color: tomato;
+}
+
+.loader	{
+	margin-left: 8px !important;
+	vertical-align: initial !important;
+}
