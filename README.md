@@ -1,5 +1,5 @@
 # Crypto-Wallet-React (Usd, Dai)
-An app that lets you mint, send, recieve and approve mock Dai and Usd coins.  
+An app that lets you mint, send, receive and approve mock Dai and Usd coins.  
 
 ### Features
 + Beautiful UI
@@ -28,7 +28,7 @@ clone repo
 run `yarn start`
 
 # Live Version
-#### URL: [Interact With Crypto Wallet](https://startup-progress-ayezahmed.vercel.app)
+#### URL: [Interact With Crypto Wallet](https://usd-dai-crypto-wallet-react.vercel.app)
 
 # Author
 Saintaze [@saintaze](https://github.com/saintaze/)
