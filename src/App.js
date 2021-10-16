@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Container } from 'semantic-ui-react';
-import { Menu, Loader } from 'semantic-ui-react';
+import { Loader } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
 import { connectBlockchain } from './connectBlockchain';
 import { setContracts } from './store/slices/contractSlice';
 import { setAccount } from './store/slices/accountSlice';
 import WalletList from './components/WalletList/WalletList';
+import MainMenu from './components/MainMenu/MainMenu';
 
 import './App.css';
 
@@ -37,9 +38,7 @@ function App() {
 
   return (
 		<>
-			<Menu color="black" inverted attached="top">
-				<Menu.Item header>Crypto Wallet</Menu.Item>
-			</Menu>
+			<MainMenu />
 			<Container>
 				{!dataIsLoaded ? 
 					<Loader active content="Initializing" /> : 

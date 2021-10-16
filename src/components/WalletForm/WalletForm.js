@@ -2,18 +2,18 @@ import { useState, useEffect } from 'react';
 import { Form, Input, Button, Message, Loader, Header } from 'semantic-ui-react';
 import { ethers } from 'ethers';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateBalance } from '../../store/slices/contractSlice';
+import { updateBalance, setBalanceLoading } from '../../store/slices/contractSlice';
 import { paymentAction } from '../../enums/paymentAction';
 
 import './WalletForm.css';
 
 const WalletForm = ({token}) => {
 	const { signerAddress } = useSelector(state => state.account);
+	const { balanceLoading } = useSelector(state => state.contract);
 	const dispatch = useDispatch();
 
 	const [transferIsLoading, setTransferIsloading] = useState(false);
 	const [approveIsLoading, setApproveIsLoading] = useState(false);
-	const [loadingBalance, setLoadingBalance] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
 	const tokenFormIS = {amount: '', address: ''};
 	const [tokenForm, setTokenForm] = useState(tokenFormIS);
@@ -23,29 +23,29 @@ const WalletForm = ({token}) => {
 		setTokenForm({...tokenForm, [e.target.name]: e.target.value});
 	}
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async(e) => {
 		e.preventDefault();
 		setErrorMessage('');
 		if(!(address.trim() && amount.trim())) return;
 		if(e.nativeEvent.submitter.textContent === paymentAction.TRANSFER){
-			handleTransfer();
+			await handleTransfer();
 		}
 		if(e.nativeEvent.submitter.textContent === paymentAction.APPROVE){
-			handleApprove();
+			await handleApprove();
 		}
+		setTokenForm(tokenFormIS);
 	}
 
 	const handleTransfer = async () => {
 		setTransferIsloading(true);
 		try{
 			await token.contract.transfer(address, amount);	
-			setLoadingBalance(true);
+			dispatch(setBalanceLoading({symbol: token.symbol, loadingState: true}));
 		}catch(e) {
 			setErrorMessage(e.message);
-			setLoadingBalance(false);
+			dispatch(setBalanceLoading({symbol: token.symbol, loadingState: false}));
 		}
 		setTransferIsloading(false);
-		setTokenForm(tokenFormIS);
 	}
 
 	const handleApprove = async () => {
@@ -60,10 +60,10 @@ const WalletForm = ({token}) => {
 
 	useEffect(() => {
 		const reupdateBalance = async (from, to) => {
-			if (from === signerAddress && to === address){
+			if (from === signerAddress){
 				const balance = await token.contract.balanceOf(signerAddress);
 				dispatch(updateBalance({balance, address: token.contract.address}));
-				setLoadingBalance(false);
+				dispatch(setBalanceLoading({symbol: token.symbol, loadingState: false}));
 			}
 		}
 		token.contract.on('Transfer', reupdateBalance);	
@@ -75,7 +75,7 @@ const WalletForm = ({token}) => {
 			<Form error={!!errorMessage} onSubmit={handleSubmit}>
 				<Message error header='Oops' content={errorMessage} />
 				<Form.Field>
-					<Header as='h3'>Balance <Loader inline size="mini" active={loadingBalance} /></Header>
+					<Header as='h3'>Balance <Loader inline size="mini" active={balanceLoading[token.symbol].loading} /></Header>
 					<div className="balance">{ethers.utils.formatUnits(token.balance, token.decimals)} ({token.symbol.toLowerCase()})</div>
 				</Form.Field>
 				<Form.Field>
